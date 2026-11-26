@@ -1,0 +1,290 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: https:;" />
+    <title>YOUR MOM'S CAPS — Underground Streetwear</title>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="street-body">
+
+    <!-- CABECERA URBANA -->
+    <header class="street-header">
+        <div class="brand-tag">
+            <span class="brand-sticker">EST. 2026 // UNDERGROUND</span>
+            <h1 class="brand-title">YOUR MOM'S CAPS</h1>
+        </div>
+
+        <!-- Se oculta al iniciar sesión -->
+        <nav id="authActions" class="auth-actions" aria-label="Acceso de usuario">
+            <button type="button" id="btnOpenLogin" class="btn-outline">INICIAR SESIÓN</button>
+            <button type="button" id="btnOpenRegister" class="btn-solid">CREAR CUENTA</button>
+        </nav>
+
+        <!-- Visible solo con sesión activa -->
+        <div id="sessionBadge" class="session-badge hidden" aria-live="polite">
+            <span id="activeUserLabel" class="active-user-label"></span>
+            <button type="button" id="btnLogout" class="btn-danger-sm">SALIR</button>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="street-main">
+        <section class="hero-graffiti">
+            <div class="hero-copy">
+                <p class="kicker-tag">SKATE • GRAFFITI • HEAVY COTTON</p>
+                <h2 class="hero-headline">GORRAS QUE NO PIDEN PERMISO</h2>
+                <p class="hero-sub">
+                    Bordados en alto relieve, viseras curvas y planas, edicion limitada en la calle.
+                </p>
+                <button type="button" id="btnDropAlert" class="btn-hero-pulse">
+                    🔥 VER DROP ACTIVO & PAGAR
+                </button>
+            </div>
+            <div class="hero-sticker-box">
+                <div class="sticker-card">NO MINIMALISM</div>
+                <div class="sticker-card tilt-right">100% STREET</div>
+            </div>
+        </section>
+
+        <!-- CATÁLOGO DE GORRAS -->
+        <section id="catalogSection" class="catalog-section">
+            <h3 class="section-heading">DROP DE LA CALLE</h3>
+            <div id="capCatalog" class="catalog-grid"></div>
+        </section>
+
+        <!-- CHECKOUT / PAGO CIFRADO -->
+        <section id="checkoutSection" class="checkout-section">
+            <h3 class="section-heading">TU CARRITO & PAGO CIFRADO</h3>
+
+            <!-- Resumen del carrito en una tarjeta compacta superior -->
+            <div class="cart-widget">
+                <div class="cart-widget-heading">
+                    <div class="cart-icon" aria-hidden="true">🛒</div>
+                    <div>
+                        <h4>MI CARRITO</h4>
+                        <p>Revisa tus gorras antes de pagar</p>
+                    </div>
+                    <span id="cartCount" class="cart-count" aria-live="polite">0</span>
+                </div>
+                <div id="cartBox" class="cart-box">
+                    <p class="empty-msg">Tu carrito está vacío. Agrega una gorra del drop.</p>
+                </div>
+            </div>
+
+            <!-- Aviso visible solo cuando NO hay sesión iniciada -->
+            <div id="checkoutAuthGate" class="payment-form auth-gate" style="border: 1px solid #8b5cf6;">
+                <h4>INICIA SESIÓN PARA PAGAR</h4>
+                <p>Puedes agregar gorras al carrito sin cuenta, pero la sección de pago y la compra se desbloquean al iniciar sesión.</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px;">
+                    <button type="button" id="btnGateLogin" class="btn-solid">INICIAR SESIÓN</button>
+                    <button type="button" id="btnGateRegister" class="btn-outline">CREAR CUENTA</button>
+                </div>
+            </div>
+
+            <!-- Oculto hasta iniciar sesión -->
+            <form id="paymentForm" class="payment-form hidden payment-panel" autocomplete="off">
+                <h4>ELIGE CÓMO QUIERES PAGAR</h4>
+                <div class="payment-methods">
+                    <label class="payment-method-option">
+                        <input type="radio" name="paymentMethod" value="card" checked />
+                        <span class="method-symbol">💳</span>
+                        <span><strong>Tarjeta</strong><small>Agregar tarjeta de crédito o débito</small></span>
+                    </label>
+                    <label class="payment-method-option">
+                        <input type="radio" name="paymentMethod" value="paypal" />
+                        <span class="method-symbol">🅿️</span>
+                        <span><strong>PayPal</strong><small>Pagar con tu cuenta PayPal</small></span>
+                    </label>
+                </div>
+
+                <div id="cardFields" class="card-fields">
+                    <label for="cardHolder">Titular de la tarjeta</label>
+                    <input type="text" id="cardHolder" name="cardHolder" placeholder="NOMBRE APELLIDO" required />
+
+                    <label for="cardNumber">Número de tarjeta</label>
+                    <input type="text" id="cardNumber" name="cardNumber" inputmode="numeric" maxlength="16" placeholder="4532 •••• •••• 8890" required />
+
+                    <div class="row-2">
+                        <div>
+                            <label for="cardExpiry">Exp (MM/AA)</label>
+                            <input type="text" id="cardExpiry" name="cardExpiry" maxlength="5" placeholder="12/29" required />
+                        </div>
+                        <div>
+                            <label for="cardCvv">CVV</label>
+                            <input type="password" id="cardCvv" name="cardCvv" inputmode="numeric" maxlength="3" placeholder="•••" autocomplete="off" required />
+                        </div>
+                    </div>
+                </div>
+                <div id="paypalInfo" class="paypal-info hidden">
+                    <strong>Continuar con PayPal</strong>
+                    <p>Al confirmar, se mostraría la conexión segura con PayPal para autorizar el pago.</p>
+                </div>
+
+                <button type="submit" class="btn-pay-now">HACER PAGO</button>
+                <div id="paymentReceipt" class="payment-receipt hidden"></div>
+            </form>
+        </section>
+    </main>
+
+    <!-- MODAL 1: INICIAR SESIÓN -->
+    <div id="loginModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+        <div class="modal-card">
+            <button type="button" class="modal-close" data-close-modal="loginModal" aria-label="Cerrar">✕</button>
+            <h3 id="loginTitle">INICIAR SESIÓN</h3>
+            <form id="loginForm" autocomplete="off">
+                <label for="loginEmail">Correo electrónico</label>
+                <input type="email" id="loginEmail" required />
+
+                <label for="loginPassword">Contraseña</label>
+                <div class="password-field-wrap">
+                    <input type="password" id="loginPassword" required />
+                    <button type="button" class="btn-toggle-pwd" data-target-pwd="loginPassword" aria-label="Mostrar u ocultar contraseña">
+                        👁
+                    </button>
+                </div>
+
+                <button type="submit" class="btn-solid full-w">ENTRAR A LA TIENDA</button>
+                <p id="loginFeedback" class="feedback-msg"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CREAR CUENTA (NO GUARDA NADA SI SE CIERRA) -->
+    <div id="registerModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+        <div class="modal-card">
+            <button type="button" id="btnCancelRegister" class="modal-close" aria-label="Cerrar sin guardar">✕</button>
+            <h3 id="registerTitle">CREAR CUENTA</h3>
+            <form id="registerForm" autocomplete="off">
+                <label for="regName">Alias o nombre</label>
+                <input type="text" id="regName" name="regName" required />
+
+                <label for="regEmail">Correo electrónico</label>
+                <input type="email" id="regEmail" name="regEmail" required />
+
+                <label for="regPassword">Contraseña (exactamente 10 caracteres)</label>
+                <div class="password-field-wrap">
+                    <input type="password"
+                           id="regPassword"
+                           name="regPassword"
+                           minlength="10"
+                           maxlength="10"
+                           placeholder="Ej. Sk8#Cap202"
+                           required />
+                    <button type="button" class="btn-toggle-pwd" data-target-pwd="regPassword" aria-label="Mostrar u ocultar contraseña">
+                        👁
+                    </button>
+                </div>
+
+                <ul id="pwdChecklist" class="pwd-checklist" aria-live="polite">
+                    <li id="rule-length" class="pwd-rule">✗ Exactamente 10 caracteres (0/10)</li>
+                    <li id="rule-lower" class="pwd-rule">✗ Al menos una letra minúscula (a-z)</li>
+                    <li id="rule-upper" class="pwd-rule">✗ Al menos una letra mayúscula (A-Z)</li>
+                    <li id="rule-number" class="pwd-rule">✗ Al menos un número (0-9)</li>
+                    <li id="rule-symbol" class="pwd-rule">✗ Al menos un símbolo (ej. #, @, !, $)</li>
+                </ul>
+
+                <label for="regConfirmPassword">Confirmar contraseña</label>
+                <div class="password-field-wrap">
+                    <input type="password"
+                           id="regConfirmPassword"
+                           name="regConfirmPassword"
+                           minlength="10"
+                           maxlength="10"
+                           placeholder="Repite tu contraseña"
+                           required />
+                    <button type="button" class="btn-toggle-pwd" data-target-pwd="regConfirmPassword" aria-label="Mostrar u ocultar confirmación">
+                        👁
+                    </button>
+                </div>
+                <p id="confirmMatchMsg" class="feedback-msg"></p>
+
+                <div class="legal-row">
+                    <input type="checkbox" id="acceptLegal" required />
+                    <label for="acceptLegal">
+                        Acepto los
+                        <button type="button" id="openLegalPopup" class="link-popup-btn">
+                            Términos y Condiciones y Aviso de Privacidad
+                        </button>
+                    </label>
+                </div>
+
+                <button type="submit" id="btnSubmitRegister" class="btn-solid full-w" disabled>REGISTRARME</button>
+                <p id="registerFeedback" class="feedback-msg"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- POPUP 3: TÉRMINOS Y CONDICIONES + AVISO DE PRIVACIDAD -->
+    <div id="legalModal" class="modal-backdrop legal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
+        <div class="modal-card legal-card">
+            <button type="button" id="btnCloseLegal" class="modal-close" aria-label="Cerrar términos">✕</button>
+            <h3 id="legalTitle">TÉRMINOS, CONDICIONES Y AVISO DE PRIVACIDAD</h3>
+            <div class="legal-scroll-box">
+                <h4>TÉRMINOS Y CONDICIONES DE USO — YOUR MOM'S CAPS</h4>
+
+                <h5>1. Aceptación de los Términos</h5>
+                <p>Al acceder, navegar, crear una cuenta, iniciar sesión o realizar compras dentro de la plataforma web de <strong>YOUR MOM'S CAPS</strong>, el usuario acepta quedar sujeto a los presentes Términos y Condiciones, así como a las políticas operativas y de seguridad aquí descritas. Si no estás de acuerdo con alguna disposición, deberás abstenerte de utilizar el sitio o completar transacciones.</p>
+
+                <h5>2. Naturaleza del Catálogo y Disponibilidad de Stock</h5>
+                <p>Las gorras y artículos urbanos publicados corresponden a drops y ediciones limitadas sujetos a disponibilidad de inventario en tiempo real. Agregar un producto al carrito no reserva de forma definitiva el artículo hasta que la orden sea confirmada y procesada. <strong>YOUR MOM'S CAPS</strong> se reserva el derecho de modificar precios, actualizar existencias, descontinuar modelos o limitar cantidades por cliente sin previo aviso.</p>
+
+                <h5>3. Registro de Cuenta, Autenticación y Seguridad</h5>
+                <p>Para acceder a la sección de pago y finalizar compras es necesario contar con una sesión autenticada. El usuario se compromete a proporcionar información veraz y actualizada, y a resguardar confidencialmente su contraseña. Las contraseñas enviadas al servidor se procesan mediante funciones criptográficas de hash (<strong>bcrypt</strong>) y no se almacenan en texto plano. Si cierras el modal de registro antes de concluirlo, los datos capturados en ese intento se descartan y no generan cuenta.</p>
+
+                <h5>4. Proceso de Compra, Pagos y Cifrado</h5>
+                <p>La sección de pago únicamente se habilita para usuarios con sesión activa. Los datos sensibles de pago capturados en el formulario se manejan bajo medidas de protección en el cliente (cifrado <strong>AES-GCM</strong> y validación de campos) y se procesan conforme a las reglas del sistema de checkout. El usuario declara ser el titular legítimo o estar autorizado para utilizar el medio de pago empleado y se obliga a no realizar cargos no autorizados ni pruebas fraudulentas.</p>
+
+                <h5>5. Envíos, Entregas, Cambios y Devoluciones</h5>
+                <p>Los tiempos de preparación y envío dependen de la dirección proporcionada, la validación del pedido y la logística aplicable. Es responsabilidad del usuario revisar cuidadosamente los datos de envío y las características del producto (tipo de visera, talla y modelo) antes de confirmar. Cualquier solicitud de aclaración, cambio o devolución deberá realizarse dentro de los plazos establecidos y con el producto en condiciones originales, sin uso, sin alteraciones y con sus etiquetas o empaques correspondientes.</p>
+
+                <h5>6. Propiedad Intelectual</h5>
+                <p>Todos los diseños, bordados, logotipos, marcas denominativas o gráficas, textos, fotografías, ilustraciones, estilos visuales, estructuras de código y scripts de <strong>YOUR MOM'S CAPS</strong> son propiedad de sus respectivos titulares o se utilizan bajo licencia. Queda prohibida su reproducción, copia, distribución, modificación o explotación comercial no autorizada.</p>
+
+                <h5>7. Conducta del Usuario y Prohibiciones</h5>
+                <p>Queda estrictamente prohibido utilizar el sitio para fines ilícitos, intentar vulnerar controles de acceso, alterar el funcionamiento del servidor o del carrito, inyectar código malicioso, automatizar peticiones abusivas o suplantar la identidad de terceros. Ante cualquier uso indebido, se podrá restringir o suspender el acceso.</p>
+
+                <h5>8. Limitación de Responsabilidad</h5>
+                <p>La plataforma se proporciona tal como está disponible ("as is" / según disponibilidad operativa). <strong>YOUR MOM'S CAPS</strong> no garantiza que el servicio esté libre de interrupciones temporales, fallos de red, errores de terceros o actualizaciones técnicas, y no será responsable por daños indirectos derivados de interrupciones ajenas a su control razonable.</p>
+
+                <h5>9. Modificaciones a los Términos</h5>
+                <p><strong>YOUR MOM'S CAPS</strong> podrá actualizar estos Términos y Condiciones en cualquier momento para reflejar mejoras técnicas, cambios operativos o requisitos legales. La versión vigente será la publicada en el sitio al momento de su consulta o compra.</p>
+
+                <hr />
+
+                <h4>AVISO DE PRIVACIDAD INTEGRAL — YOUR MOM'S CAPS</h4>
+
+                <h5>1. Identidad y Domicilio del Responsable</h5>
+                <p><strong>YOUR MOM'S CAPS</strong> es responsable del tratamiento de los datos personales que recaba a través de esta plataforma web, conforme a los principios de licitud, finalidad, proporcionalidad, consentimiento, calidad, responsabilidad y seguridad.</p>
+
+                <h5>2. Datos Personales que se Recaban</h5>
+                <p>Para operar la cuenta, la autenticación y el flujo de compra podemos recabar: (a) datos de identificación y contacto, como alias o nombre y correo electrónico; (b) credenciales de acceso, procesadas mediante hash seguro con <strong>bcrypt</strong>; (c) información de carrito y pedido, como artículos seleccionados y comprobante de operación; y (d) datos de pago ingresados en el checkout, cifrados en memoria con <strong>AES-GCM</strong> durante el flujo de compra. No almacenamos números completos de tarjeta ni códigos CVV en almacenamiento persistente.</p>
+
+                <h5>3. Finalidades del Tratamiento de Datos</h5>
+                <p><strong>Finalidades primarias (necesarias):</strong> crear y administrar tu cuenta de usuario, autenticar tu sesión, permitir agregar productos al carrito, habilitar el checkout para usuarios autenticados, procesar o simular el pago cifrado, generar el comprobante de compra y dar seguimiento a tu pedido o atención al cliente.</p>
+                <p><strong>Finalidades secundarias (no necesarias):</strong> enviar novedades sobre drops, lanzamientos o promociones. Si no deseas que tus datos se usen para finalidades secundarias, puedes indicarlo al momento de contactar o no autorizarlo en los canales habilitados, sin que ello afecte el uso básico de la tienda.</p>
+
+                <h5>4. Medidas de Seguridad Técnicas y Administrativas</h5>
+                <p>Implementamos controles de seguridad acordes con el entorno de la aplicación, incluyendo control de acceso a la sección de pago condicionado a sesión activa, hashing de contraseñas con <strong>bcrypt</strong>, cifrado de datos sensibles con <strong>AES-GCM</strong>, políticas de seguridad de contenido (<strong>CSP</strong>) y descarte de datos de registro si se cancela o cierra el modal antes de enviar.</p>
+
+                <h5>5. Transferencias de Datos</h5>
+                <p>Tus datos personales no serán vendidos ni comercializados a terceros. Únicamente podrán compartirse cuando sea estrictamente necesario para cumplir obligaciones legales, requerimiento de autoridad competente o para la operación técnica y de procesamiento vinculada al servicio solicitado por el usuario.</p>
+
+                <h5>6. Derechos ARCO y Revocación del Consentimiento</h5>
+                <p>Como titular de los datos personales, tienes derecho a <strong>Acceder</strong> a tus datos, <strong>Rectificarlos</strong> si son inexactos o incompletos, <strong>Cancelarlos</strong> cuando proceda u <strong>Oponerte</strong> a su tratamiento para finalidades específicas (derechos ARCO), así como a revocar tu consentimiento en los términos aplicables. Para ejercer estos derechos o presentar dudas sobre privacidad, puedes comunicarte a través de los canales de contacto oficiales de <strong>YOUR MOM'S CAPS</strong> indicando tu nombre o alias, correo electrónico, el derecho que deseas ejercer y una descripción clara de tu solicitud.</p>
+
+                <h5>7. Uso de Almacenamiento Local, Sesión y Cookies Técnicas</h5>
+                <p>El sitio puede utilizar memoria de sesión, almacenamiento local o mecanismos técnicos necesarios para mantener el estado de la interfaz, el carrito o el flujo de la aplicación. Puedes administrar o borrar estos datos desde la configuración de tu navegador, teniendo en cuenta que deshabilitar elementos esenciales puede afectar el funcionamiento de la tienda.</p>
+
+                <h5>8. Cambios al Aviso de Privacidad</h5>
+                <p>Cualquier modificación o actualización a este Aviso de Privacidad será comunicada a través de este mismo apartado dentro de la plataforma, indicando la versión o fecha de actualización correspondiente.</p>
+            </div>
+            <button type="button" id="btnAcceptLegalInside" class="btn-hero-pulse full-w">ACEPTAR Y VOLVER AL REGISTRO</button>
+        </div>
+    </div>
+    <script type="module" src="dist/js/auth-flow.js"></script>
+    <script type="module" src="dist/js/store-checkout.js"></script>
+    <script src="js/bcrypt-gate.js"></script>
+</body>
+</html>
